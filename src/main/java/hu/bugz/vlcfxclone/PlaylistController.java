@@ -1,9 +1,11 @@
 package hu.bugz.vlcfxclone;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -35,14 +37,14 @@ public class PlaylistController implements Initializable {
             this.trackTime = format(media.getDuration());
         }
 
-        private String format(Duration d) {
+        public static String format(Duration d) {
             int hours = (int) d.toHours();
             int minutes = (int) d.toMinutes() % 60;
             int seconds = (int) d.toSeconds() % 60;
 
-            return (hours == 0 ? "" : hours + ":") +
-                    (minutes == 0 ? "" : minutes + ":") +
-                    (seconds == 0 ? "" : seconds);
+            return (hours == 0 ? "00:" : (hours < 10 ? "0" + hours : hours) + ":") +
+                   (minutes == 0 ? "00:" : (minutes < 10 ? "0" + minutes : minutes) + ":") +
+                   (seconds == 0 ? "00" : (seconds < 10 ? "0" + seconds : seconds));
         }
 
         public String getTrackNumber() {
@@ -106,6 +108,9 @@ public class PlaylistController implements Initializable {
         trackNumber.setCellValueFactory(new PropertyValueFactory<PlayListData, String>("trackNumber"));
         trackTime.setCellValueFactory(new PropertyValueFactory<PlayListData, String>("trackTime"));
         trackTitle.setCellValueFactory(new PropertyValueFactory<PlayListData, String>("trackTitle"));
+
+        playlistTable.prefHeightProperty().bind(Bindings.selectDouble(playlistTable.sceneProperty(), "height"));
+        playlistTable.prefWidthProperty().bind(Bindings.selectDouble(playlistTable.sceneProperty(), "width"));
 
         playlistTable.setItems(list);
     }

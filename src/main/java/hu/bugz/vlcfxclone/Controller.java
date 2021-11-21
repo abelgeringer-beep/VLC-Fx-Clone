@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
@@ -44,6 +45,8 @@ public class Controller implements Initializable {
     private Slider timeSlider;
     @FXML
     private Button playBtn;
+    @FXML
+    private Label timeLabel;
 
     private File getFile() throws NullPointerException {
         FileChooser fileChooser = new FileChooser();
@@ -57,8 +60,15 @@ public class Controller implements Initializable {
             mediaPlayer.dispose();
 
         mediaPlayer = new MediaPlayer(media);
+
+        mediaPlayer.setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                timeSlider.setMax(media.getDuration().toSeconds());
+            }
+        });
+
         mediaView.setMediaPlayer(mediaPlayer);
-        timeSlider.setValue(0.0f);
 
         volumeSlider.setValue(mediaPlayer.getVolume() * 100);
         volumeSlider.valueProperty().addListener(observable -> mediaPlayer.setVolume(volumeSlider.getValue() / 100));
@@ -67,10 +77,18 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Duration> observableValue, Duration duration, Duration t1) {
                 timeSlider.setValue(t1.toSeconds());
+                timeLabel.setText(PlaylistController.PlayListData.format(t1) + "/" + PlaylistController.PlayListData.format(media.getDuration()));
             }
         });
 
-        timeSlider.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        timeSlider.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                mediaPlayer.seek(Duration.seconds(timeSlider.getValue()));
+            }
+        });
+
+        timeSlider.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 mediaPlayer.seek(Duration.seconds(timeSlider.getValue()));
@@ -184,7 +202,7 @@ public class Controller implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Playlist-view.fxml"));
             root = fxmlLoader.load();
-            PlaylistController playlistController = fxmlLoader.getController();
+            //PlaylistController playlistController = fxmlLoader.getController();
             //playlistController.setPlayList(playList);
 
             Stage stage = new Stage();
