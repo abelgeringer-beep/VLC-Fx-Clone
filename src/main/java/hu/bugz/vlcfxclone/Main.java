@@ -9,15 +9,19 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class Main extends Application {
 
-    private static final Logger logger = LogManager.getLogger(HelloApplication.class);
+    private static final Logger logger = LogManager.getLogger(Main.class);
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Controller-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("VLC-Fx-Clone");
+
+        stage.setMinWidth(600.0);
+        stage.setMinHeight(64 + 25 + 24);
+
         stage.setScene(scene);
         stage.show();
     }

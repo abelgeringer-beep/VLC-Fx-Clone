@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
+      prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="hu.bugz.vlcfxclone.PlaylistController">
+    <children>
+        <TableView fx:id="playlistTable" prefHeight="500.0" prefWidth="700.0">
+            <columns>
+                <TableColumn fx:id="trackNumber" prefWidth="75.0" text="Number"/>
+                <TableColumn fx:id="trackTitle" prefWidth="323.0" text="Title"/>
+                <TableColumn fx:id="trackTime" minWidth="0.0" prefWidth="201.0" text="Time"/>
+            </columns>
+        </TableView>
+    </children>
+</Pane>
