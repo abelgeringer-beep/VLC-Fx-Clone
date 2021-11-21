@@ -26,5 +26,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.14.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.14.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:15" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:win:15" level="project" />
   </component>
 </module>
