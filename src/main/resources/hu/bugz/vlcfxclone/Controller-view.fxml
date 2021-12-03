@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.media.*?>
+
 <BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.bugz.vlcfxclone.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -50,6 +51,7 @@
                                 <Button fx:id="stopBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#stopVideo" text="Stop" textAlignment="CENTER" />
                                 <Button fx:id="prevButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#prevMedia" text="|&lt;&lt;" textAlignment="CENTER" />
                                 <Button fx:id="slowBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#slowVideo" text="&lt;&lt;" textAlignment="CENTER" />
+                                <Button fx:id="resetSpeedBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#resetSpeed" text="&gt;" textAlignment="CENTER" />
                                 <Button fx:id="fastBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#fastVideo" text="&gt;&gt;" textAlignment="CENTER" />
                                 <Button fx:id="nextButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#nextMedia" text="&gt;&gt;|" textAlignment="CENTER" />
                                 <Button mnemonicParsing="false" onAction="#openPlaylist" text="Playlist" />
