@@ -5,13 +5,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.media.Media;
 import javafx.util.Duration;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -83,9 +81,9 @@ public class PlaylistController implements Initializable {
         }
     }
 
-    private PlayListDataArray observablePlayListData = new PlayListDataArray(Controller.playList);
+    private final PlayListDataArray observablePlayListData = new PlayListDataArray(Controller.playList);
 
-    private ObservableList<PlayListData> list = FXCollections.observableArrayList(
+    private final ObservableList<PlayListData> list = FXCollections.observableArrayList(
             observablePlayListData
     );
 
@@ -105,9 +103,9 @@ public class PlaylistController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.debug(Controller.playList.size());
 
-        trackNumber.setCellValueFactory(new PropertyValueFactory<PlayListData, String>("trackNumber"));
-        trackTime.setCellValueFactory(new PropertyValueFactory<PlayListData, String>("trackTime"));
-        trackTitle.setCellValueFactory(new PropertyValueFactory<PlayListData, String>("trackTitle"));
+        trackNumber.setCellValueFactory(new PropertyValueFactory<>("trackNumber"));
+        trackTime.setCellValueFactory(new PropertyValueFactory<>("trackTime"));
+        trackTitle.setCellValueFactory(new PropertyValueFactory<>("trackTitle"));
 
         playlistTable.prefHeightProperty().bind(Bindings.selectDouble(playlistTable.sceneProperty(), "height"));
         playlistTable.prefWidthProperty().bind(Bindings.selectDouble(playlistTable.sceneProperty(), "width"));

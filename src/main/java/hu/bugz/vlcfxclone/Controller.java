@@ -2,10 +2,7 @@ package hu.bugz.vlcfxclone;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,9 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -24,7 +19,6 @@ import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,39 +58,22 @@ public class Controller implements Initializable {
 
         mediaPlayer = new MediaPlayer(media);
 
-        mediaPlayer.setOnReady(new Runnable() {
-            @Override
-            public void run() {
-                timeSlider.setMax(media.getDuration().toSeconds());
-            }
-        });
+        mediaPlayer.setOnReady(() -> timeSlider.setMax(media.getDuration().toSeconds()));
 
         mediaView.setMediaPlayer(mediaPlayer);
 
         volumeSlider.setValue(mediaPlayer.getVolume() * 100);
         volumeSlider.valueProperty().addListener(observable -> mediaPlayer.setVolume(volumeSlider.getValue() / 100));
 
-        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
-            @Override
-            public void changed(ObservableValue<? extends Duration> observableValue, Duration duration, Duration t1) {
-                timeSlider.setValue(t1.toSeconds());
-                timeLabel.setText(PlaylistController.PlayListData.format(t1) + "/" + PlaylistController.PlayListData.format(media.getDuration()));
-            }
+        mediaPlayer.currentTimeProperty().addListener((observableValue, duration, t1) -> {
+            timeSlider.setValue(t1.toSeconds());
+            timeLabel.setText(PlaylistController.PlayListData.format(t1) + "/"
+                    + PlaylistController.PlayListData.format(media.getDuration()));
         });
 
-        timeSlider.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                mediaPlayer.seek(Duration.seconds(timeSlider.getValue()));
-            }
-        });
+        timeSlider.setOnMousePressed(mouseEvent -> mediaPlayer.seek(Duration.seconds(timeSlider.getValue())));
 
-        timeSlider.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                mediaPlayer.seek(Duration.seconds(timeSlider.getValue()));
-            }
-        });
+        timeSlider.setOnMouseDragged(mouseEvent -> mediaPlayer.seek(Duration.seconds(timeSlider.getValue())));
 
         playBtn.setText("Pause");
         mediaPlayer.play();
@@ -111,26 +88,20 @@ public class Controller implements Initializable {
 
         playList = new PlayList();
 
-        mediaView.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                Dragboard db = dragEvent.getDragboard();
-                if (db.hasFiles()) {
-                    dragEvent.acceptTransferModes(TransferMode.COPY);
-                } else {
-                    dragEvent.consume();
-                }
+        mediaView.setOnDragOver(dragEvent -> {
+            Dragboard db = dragEvent.getDragboard();
+            if (db.hasFiles()) {
+                dragEvent.acceptTransferModes(TransferMode.COPY);
+            } else {
+                dragEvent.consume();
             }
         });
 
-        mediaView.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                Dragboard db = dragEvent.getDragboard();
-                File file = db.getFiles().get(0);
-                logger.debug(file.getAbsolutePath());
-                shouldDispose(file, false);
-            }
+        mediaView.setOnDragDropped(dragEvent -> {
+            Dragboard db = dragEvent.getDragboard();
+            File file = db.getFiles().get(0);
+            logger.debug(file.getAbsolutePath());
+            shouldDispose(file, false);
         });
 
     }
@@ -234,8 +205,6 @@ public class Controller implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Playlist-view.fxml"));
             root = fxmlLoader.load();
-            //PlaylistController playlistController = fxmlLoader.getController();
-            //playlistController.setPlayList(playList);
 
             Stage stage = new Stage();
             stage.setTitle("Playlist");
