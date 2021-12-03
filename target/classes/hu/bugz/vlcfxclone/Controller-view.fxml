@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.media.*?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.bugz.vlcfxclone.Controller">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open file..." />
+                <MenuItem fx:id="addToPlaylist" mnemonicParsing="false" onAction="#addToPlaylist" text="Add to playlist..." />
+                <MenuItem mnemonicParsing="false" onAction="#closeButton" text="Close" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+                <MenuItem mnemonicParsing="false" text="Delete" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" text="About" />
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <MediaView fx:id="mediaView" BorderPane.alignment="CENTER" />
+    </center>
+    <bottom>
+        <VBox nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+            <children>
+            <HBox alignment="CENTER">
+               <children>
+                      <Slider fx:id="timeSlider" minWidth="500.0" HBox.hgrow="ALWAYS">
+                          <opaqueInsets>
+                              <Insets left="10.0" right="10.0" top="30.0" />
+                          </opaqueInsets>
+                          <padding>
+                              <Insets bottom="10.0" />
+                          </padding>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                      </Slider>
+                  <Label fx:id="timeLabel" prefWidth="75.0" />
+               </children>
+            </HBox>
+                <HBox alignment="CENTER">
+                    <children>
+                        <HBox>
+                            <children>
+                                <Button fx:id="playBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#playVideo" text="Play" textAlignment="CENTER" />
+                                <Button fx:id="stopBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#stopVideo" text="Stop" textAlignment="CENTER" />
+                                <Button fx:id="prevButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#prevMedia" text="|&lt;&lt;" textAlignment="CENTER" />
+                                <Button fx:id="slowBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#slowVideo" text="&lt;&lt;" textAlignment="CENTER" />
+                                <Button fx:id="fastBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#fastVideo" text="&gt;&gt;" textAlignment="CENTER" />
+                                <Button fx:id="nextButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#nextMedia" text="&gt;&gt;|" textAlignment="CENTER" />
+                                <Button mnemonicParsing="false" onAction="#openPlaylist" text="Playlist" />
+                            </children>
+                        </HBox>
+                        <Slider fx:id="volumeSlider" />
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" />
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+    </bottom>
+</BorderPane>

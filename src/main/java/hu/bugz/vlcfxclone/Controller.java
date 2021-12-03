@@ -14,7 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -107,6 +110,41 @@ public class Controller implements Initializable {
         mediaHeight.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height").subtract(113));
 
         playList = new PlayList();
+
+        mediaView.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                Dragboard db = dragEvent.getDragboard();
+                if (db.hasFiles()) {
+                    dragEvent.acceptTransferModes(TransferMode.COPY);
+                } else {
+                    dragEvent.consume();
+                }
+            }
+        });
+
+        mediaView.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                Dragboard db = dragEvent.getDragboard();
+                File file = db.getFiles().get(0);
+                logger.debug(file.getAbsolutePath());
+                shouldDispose(file, false);
+            }
+        });
+
+    }
+
+    private void shouldDispose(File file, boolean remove){
+        if (playList.size() == 0) {
+            playList.add(new Media(file.toURI().toString()));
+            initMediaPlayer(playList.get(0), false);
+        } else {
+            if(remove)
+                playList.remove(0);
+            playList.add(new Media(file.toURI().toString()));
+            initMediaPlayer(playList.get(0), true);
+        }
     }
 
     @FXML
@@ -115,14 +153,7 @@ public class Controller implements Initializable {
             File file = getFile();
             logger.debug(file.toURI().toString());
 
-            if (playList.size() == 0) {
-                playList.add(new Media(file.toURI().toString()));
-                initMediaPlayer(playList.get(0), false);
-            } else {
-                playList.remove(0);
-                playList.add(new Media(file.toURI().toString()));
-                initMediaPlayer(playList.get(0), true);
-            }
+            shouldDispose(file, true);
 
         } catch (NullPointerException e) {
             logger.error(e.getMessage());
@@ -131,6 +162,7 @@ public class Controller implements Initializable {
 
     @FXML
     private void stopVideo(ActionEvent event) {
+        if (mediaPlayer == null) return;
         playBtn.setText("Play");
         mediaPlayer.stop();
     }
