@@ -2,7 +2,6 @@ package hu.bugz.vlcfxclone;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -119,7 +118,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void openFile(ActionEvent Event) {
+    public void openFile() {
         try {
             File file = getFile();
             logger.debug(file.toURI().toString());
@@ -132,14 +131,14 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void stopVideo(ActionEvent event) {
+    private void stopVideo() {
         if (mediaPlayer == null) return;
         playBtn.setText("Play");
         mediaPlayer.stop();
     }
 
     @FXML
-    private void playVideo(ActionEvent event) {
+    private void playVideo() {
         if (mediaPlayer == null) return;
         if (mediaPlayer.getStatus().toString().equals("PAUSED") ||
                 mediaPlayer.getStatus().toString().equals("STOPPED")) {
@@ -153,7 +152,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void nextMedia(ActionEvent event) {
+    private void nextMedia() {
         if (playList.size() > 0) {
             playList.nextTrack();
             initMediaPlayer(playList.get(playList.getTrackNumber()), true);
@@ -161,7 +160,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void prevMedia(ActionEvent event) {
+    private void prevMedia() {
         if (playList.size() > 0) {
             playList.prevTrack();
             initMediaPlayer(playList.get(playList.getTrackNumber()), true);
@@ -169,23 +168,40 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void fastVideo(ActionEvent event) {
-        mediaPlayer.setRate(2);
+    private void fastVideo() {
+        try{
+            mediaPlayer.setRate(2);
+        } catch (NullPointerException e) {
+            System.out.print(e.getMessage() + "\n");
+        }
     }
 
     @FXML
-    private void slowVideo(ActionEvent event) {
-        mediaPlayer.setRate(0.5);
+    private void resetSpeed() {
+        try {
+            mediaPlayer.setRate(1);
+        } catch (NullPointerException e) {
+            System.out.print(e.getMessage() + "\n");
+        }
     }
 
     @FXML
-    private void closeButton(ActionEvent event) {
+    private void slowVideo() {
+        try {
+            mediaPlayer.setRate(0.5);
+        } catch (NullPointerException e) {
+            System.out.print(e.getMessage() + "\n");
+        }
+    }
+
+    @FXML
+    private void closeButton() {
         logger.debug("Closing application...");
         System.exit(0);
     }
 
     @FXML
-    public void addToPlaylist(ActionEvent actionEvent) {
+    public void addToPlaylist() {
         try {
             File file = getFile();
             playList.add(new Media(file.toURI().toString()));
@@ -200,7 +216,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void openPlaylist(ActionEvent actionEvent) {
+    public void openPlaylist() {
         Parent root;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Playlist-view.fxml"));
