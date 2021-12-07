@@ -40,7 +40,7 @@
                         <Insets />
                      </HBox.margin>
                       </Slider>
-                  <Label fx:id="timeLabel" prefWidth="75.0" />
+                  <Label fx:id="timeLabel" prefWidth="100.0" />
                </children>
             </HBox>
                 <HBox alignment="CENTER">
@@ -51,7 +51,6 @@
                                 <Button fx:id="stopBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#stopVideo" text="Stop" textAlignment="CENTER" />
                                 <Button fx:id="prevButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#prevMedia" text="|&lt;&lt;" textAlignment="CENTER" />
                                 <Button fx:id="slowBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#slowVideo" text="&lt;&lt;" textAlignment="CENTER" />
-                                <Button fx:id="resetSpeedBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#resetSpeed" text="&gt;" textAlignment="CENTER" />
                                 <Button fx:id="fastBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#fastVideo" text="&gt;&gt;" textAlignment="CENTER" />
                                 <Button fx:id="nextButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#nextMedia" text="&gt;&gt;|" textAlignment="CENTER" />
                                 <Button mnemonicParsing="false" onAction="#openPlaylist" text="Playlist" />

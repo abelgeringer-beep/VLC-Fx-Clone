@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.media.*?>
+
 <BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.bugz.vlcfxclone.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -39,7 +40,7 @@
                         <Insets />
                      </HBox.margin>
                       </Slider>
-                  <Label fx:id="timeLabel" prefWidth="75.0" />
+                  <Label fx:id="timeLabel" prefWidth="100.0" />
                </children>
             </HBox>
                 <HBox alignment="CENTER">
