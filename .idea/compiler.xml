@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="VLC-Fx-Clone" target="17" />
+      <module name="VLC-Fx-Clone" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

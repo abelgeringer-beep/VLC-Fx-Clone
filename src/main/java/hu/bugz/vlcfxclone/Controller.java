@@ -33,6 +33,8 @@ public class Controller implements Initializable {
     private MediaPlayer mediaPlayer;
     public static PlayList playList;
 
+    private float speed;
+
     @FXML
     private MediaView mediaView;
     @FXML
@@ -84,6 +86,7 @@ public class Controller implements Initializable {
         DoubleProperty mediaHeight = mediaView.fitHeightProperty();
         mediaWidth.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
         mediaHeight.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height").subtract(113));
+        speed = 1;
 
         playList = new PlayList();
 
@@ -170,16 +173,9 @@ public class Controller implements Initializable {
     @FXML
     private void fastVideo() {
         try{
-            mediaPlayer.setRate(2);
-        } catch (NullPointerException e) {
-            System.out.print(e.getMessage() + "\n");
-        }
-    }
-
-    @FXML
-    private void resetSpeed() {
-        try {
-            mediaPlayer.setRate(1);
+            if(speed < 2)
+                speed += 0.25;
+            mediaPlayer.setRate(speed);
         } catch (NullPointerException e) {
             System.out.print(e.getMessage() + "\n");
         }
@@ -188,7 +184,9 @@ public class Controller implements Initializable {
     @FXML
     private void slowVideo() {
         try {
-            mediaPlayer.setRate(0.5);
+            if(speed >= 0.25)
+                speed -= 0.25;
+            mediaPlayer.setRate(speed);
         } catch (NullPointerException e) {
             System.out.print(e.getMessage() + "\n");
         }
