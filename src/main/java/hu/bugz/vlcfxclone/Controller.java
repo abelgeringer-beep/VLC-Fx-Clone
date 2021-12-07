@@ -177,7 +177,7 @@ public class Controller implements Initializable {
                 speed += 0.25;
             mediaPlayer.setRate(speed);
         } catch (NullPointerException e) {
-            System.out.print(e.getMessage() + "\n");
+            logger.debug(e.getMessage() + "\n");
         }
     }
 
@@ -188,7 +188,7 @@ public class Controller implements Initializable {
                 speed -= 0.25;
             mediaPlayer.setRate(speed);
         } catch (NullPointerException e) {
-            System.out.print(e.getMessage() + "\n");
+            logger.debug(e.getMessage() + "\n");
         }
     }
 
