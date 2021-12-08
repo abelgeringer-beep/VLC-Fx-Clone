@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -21,10 +22,12 @@ import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+
 
 public class Controller implements Initializable {
 
@@ -32,6 +35,7 @@ public class Controller implements Initializable {
 
     private MediaPlayer mediaPlayer;
     public static PlayList playList;
+    ArrayList<Subtitle> subtitles = new ArrayList<>();
 
     @FXML
     private MediaView mediaView;
@@ -46,9 +50,53 @@ public class Controller implements Initializable {
 
     private File getFile() throws NullPointerException {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Select a File (*.mp4)", "*.mp4");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Select a File..", "*.mp4", "*.srt");
         fileChooser.getExtensionFilters().add(filter);
+
         return fileChooser.showOpenDialog(null);
+    }
+
+    private ArrayList<Subtitle> loadSubtitles(File file){
+        ArrayList<Subtitle> subtitles = new ArrayList<>();
+        try {
+            BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            String line = input.readLine();
+            while(line != null){
+                if(!line.equals("")){
+                    int id = Integer.parseInt(line);
+                    line = input.readLine();
+                    String[] times = line.split(" --> ");
+                    String[] endTimes = times[1].split(":");
+                    String[] startTimes = times[0].split(":");
+                    int hour = Integer.parseInt(startTimes[0]);
+                    int minute = Integer.parseInt(startTimes[1]);
+                    double second = Double.parseDouble(startTimes[2].split(",")[0])
+                            + Math.pow(10, -3) *
+                            Double.parseDouble(startTimes[2].split(",")[1]);
+                    int endHour = Integer.parseInt(endTimes[0]);
+                    int endMinute = Integer.parseInt(endTimes[1]);
+                    double endSecond = Double.parseDouble(endTimes[2].split(",")[0])
+                            + Math.pow(10, -3) *
+                            Double.parseDouble(endTimes[2].split(",")[1]);
+                    String sub = "";
+                    while(!line.equals("")){
+                        line = input.readLine();
+                        sub += " " + line;
+                    }
+                    Subtitle s = new Subtitle(id, hour, minute, second, endHour, endMinute, endSecond, sub);
+                    subtitles.add(s);
+                    logger.debug(id + " " + hour + " " + minute + " " + second + " " + endHour + " " + endMinute + " " + endSecond + " " + sub + "\n");
+                }
+                line = input.readLine();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return subtitles;
     }
 
     private void initMediaPlayer(Media media, Boolean dispose) {
@@ -129,6 +177,18 @@ public class Controller implements Initializable {
             logger.error(e.getMessage());
         }
     }
+    @FXML
+    public void openSubtitles() {
+        try {
+            File sub = getFile();
+            logger.debug(sub.toURI().toString());
+            subtitles = loadSubtitles(sub);
+            shouldDispose(sub, true);
+
+        } catch (NullPointerException e) {
+            logger.error(e.getMessage());
+        }
+    }
 
     @FXML
     private void stopVideo() {
@@ -180,8 +240,8 @@ public class Controller implements Initializable {
     private void resetSpeed() {
         try {
             mediaPlayer.setRate(1);
-        } catch (NullPointerException e) {
-            System.out.print(e.getMessage() + "\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
