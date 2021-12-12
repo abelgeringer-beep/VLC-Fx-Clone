@@ -19,7 +19,7 @@ public class Main extends Application {
         stage.setTitle("VLC-Fx-Clone");
 
         Label sub = (Label)scene.lookup("#sub_label");
-        sub.setText("");
+        sub.setText("szöveg");
 
         scene.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getClickCount() == 2){
