@@ -6,8 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main extends Application {
 
@@ -29,6 +28,8 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.show();
+
+
     }
 
     public static void main(String[] args) {

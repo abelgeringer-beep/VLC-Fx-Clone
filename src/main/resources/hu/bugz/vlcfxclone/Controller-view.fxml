@@ -39,7 +39,7 @@
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
               <MediaView fx:id="mediaView" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="218.0" layoutY="263.0" nodeOrientation="LEFT_TO_RIGHT" text="Subtitles" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="14.0">
+            <Label fx:id="sub_label" alignment="CENTER" contentDisplay="CENTER" layoutX="218.0" layoutY="263.0" nodeOrientation="LEFT_TO_RIGHT" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="14.0">
                <font>
                   <Font size="18.0" />
                </font>

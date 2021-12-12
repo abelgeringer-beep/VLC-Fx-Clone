@@ -24,9 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class Controller implements Initializable {
@@ -60,9 +58,9 @@ public class Controller implements Initializable {
         ArrayList<Subtitle> subtitles = new ArrayList<>();
         try {
             BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
-            String line = input.readLine();
-            while(line != null){
-                if(!line.equals("")){
+            String line;
+            while( (line = input.readLine()) != null){
+                if(line != ""){
                     int id = Integer.parseInt(line);
                     line = input.readLine();
                     String[] times = line.split(" --> ");
@@ -87,7 +85,6 @@ public class Controller implements Initializable {
                     subtitles.add(s);
                     logger.debug(id + " " + hour + " " + minute + " " + second + " " + endHour + " " + endMinute + " " + endSecond + " " + sub + "\n");
                 }
-                line = input.readLine();
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -97,6 +94,22 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
         return subtitles;
+    }
+    private void showSubtitles(Subtitle subs){
+        Label sub =
+        sub.setText("Hello");
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask(){
+
+            @Override
+            public void run() {
+
+            }
+        };
+
+        //timer.schedule(task, 0);
+
     }
 
     private void initMediaPlayer(Media media, Boolean dispose) {
