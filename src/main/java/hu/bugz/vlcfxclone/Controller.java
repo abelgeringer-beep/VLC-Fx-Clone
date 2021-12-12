@@ -16,6 +16,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.media.VideoTrack;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -34,6 +35,8 @@ public class Controller implements Initializable {
     private MediaPlayer mediaPlayer;
     public static PlayList playList;
     ArrayList<Subtitle> subtitles = new ArrayList<>();
+    private Timer timer;
+    private TimerTask timerTask;
 
     @FXML
     private MediaView mediaView;
@@ -45,6 +48,8 @@ public class Controller implements Initializable {
     private Button playBtn;
     @FXML
     private Label timeLabel;
+    @FXML
+    private Label sub_label;
 
     private File getFile() throws NullPointerException {
         FileChooser fileChooser = new FileChooser();
@@ -94,25 +99,10 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
         return subtitles;
-    }
-    private void showSubtitles(Subtitle subs){
-        Label sub =
-        sub.setText("Hello");
-
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask(){
-
-            @Override
-            public void run() {
-
-            }
-        };
-
-        //timer.schedule(task, 0);
 
     }
 
-    private void initMediaPlayer(Media media, Boolean dispose) {
+        private void initMediaPlayer(Media media, Boolean dispose) {
         if (dispose)
             mediaPlayer.dispose();
 
@@ -163,7 +153,18 @@ public class Controller implements Initializable {
             logger.debug(file.getAbsolutePath());
             shouldDispose(file, false);
         });
+        //mediaView.setViewOrder();
+        sub_label.setText("text");
+        timer = new Timer();
+        timerTask = new TimerTask(){
+            @Override
+            public void run() {
+                if(){
 
+                }
+
+            }
+        };
     }
 
     private void shouldDispose(File file, boolean remove){
@@ -215,11 +216,14 @@ public class Controller implements Initializable {
         if (mediaPlayer == null) return;
         if (mediaPlayer.getStatus().toString().equals("PAUSED") ||
                 mediaPlayer.getStatus().toString().equals("STOPPED")) {
+            timer.cancel();
+
             playBtn.setText("Pause");
             mediaPlayer.play();
         } else {
             playBtn.setText("Play");
             mediaPlayer.pause();
+            timer.schedule(timerTask,0);
         }
         mediaPlayer.setRate(1);
     }

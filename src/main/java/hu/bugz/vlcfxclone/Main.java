@@ -3,6 +3,7 @@ package hu.bugz.vlcfxclone;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,6 +17,9 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Controller-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("VLC-Fx-Clone");
+
+        Label sub = (Label)scene.lookup("#sub_label");
+        sub.setText("");
 
         scene.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getClickCount() == 2){
