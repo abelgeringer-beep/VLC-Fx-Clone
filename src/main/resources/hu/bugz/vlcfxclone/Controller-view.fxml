@@ -25,26 +25,26 @@
             <Menu mnemonicParsing="false" text="Edit">
                 <MenuItem mnemonicParsing="false" text="Delete" />
             </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-                <MenuItem mnemonicParsing="false" text="About" />
-            </Menu>
          <Menu mnemonicParsing="false" text="Subtitles">
            <items>
              <MenuItem mnemonicParsing="false" onAction="#openSubtitles" text="Open SRT.." />
            </items>
          </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" text="About" />
+            </Menu>
         </MenuBar>
     </top>
     <center>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
               <MediaView fx:id="mediaView" />
-            <Label fx:id="sub_label" alignment="CENTER" contentDisplay="CENTER" layoutX="218.0" layoutY="263.0" nodeOrientation="LEFT_TO_RIGHT" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="14.0">
+            <Label fx:id="sub_label" alignment="CENTER" contentDisplay="CENTER" layoutY="263.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="52.0" prefWidth="603.0" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="14.0">
                <font>
                   <Font size="18.0" />
                </font>
                <padding>
-                  <Insets bottom="2.0" left="5.0" right="90.0" top="10.0" />
+                  <Insets bottom="2.0" left="5.0" right="10.0" top="10.0" />
                </padding>
             </Label>
          </children>

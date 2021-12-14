@@ -18,9 +18,6 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("VLC-Fx-Clone");
 
-        Label sub = (Label)scene.lookup("#sub_label");
-        sub.setText("szöveg");
-
         scene.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getClickCount() == 2){
                 stage.setFullScreen(!stage.isFullScreen());

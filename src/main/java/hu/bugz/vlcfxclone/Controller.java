@@ -1,7 +1,10 @@
 package hu.bugz.vlcfxclone;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.collections.ObservableMap;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,12 +14,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaMarkerEvent;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.scene.media.VideoTrack;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -25,8 +27,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.URL;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
@@ -35,8 +37,6 @@ public class Controller implements Initializable {
     private MediaPlayer mediaPlayer;
     public static PlayList playList;
     ArrayList<Subtitle> subtitles = new ArrayList<>();
-    private Timer timer;
-    private TimerTask timerTask;
 
     @FXML
     private MediaView mediaView;
@@ -62,10 +62,11 @@ public class Controller implements Initializable {
     private ArrayList<Subtitle> loadSubtitles(File file){
         ArrayList<Subtitle> subtitles = new ArrayList<>();
         try {
-            BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
-            String line;
-            while( (line = input.readLine()) != null){
-                if(line != ""){
+            BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));
+            String line = input.readLine();
+            while(line != null){
+                if(!line.equals("")){
+                    line = line.replace("\uFEFF", "");// utf-8 bom because utf-8-bom
                     int id = Integer.parseInt(line);
                     line = input.readLine();
                     String[] times = line.split(" --> ");
@@ -82,27 +83,41 @@ public class Controller implements Initializable {
                             + Math.pow(10, -3) *
                             Double.parseDouble(endTimes[2].split(",")[1]);
                     String sub = "";
-                    while(!line.equals("")){
-                        line = input.readLine();
+
+                    line = input.readLine();
+                    while(line != null && !line.equals("")){
                         sub += " " + line;
+                        logger.debug(line);
+
+                        line = input.readLine();
                     }
+
+//                    do{
+//                        line = input.readLine();
+//                        if(!line.isBlank()){
+//                            sub += " " + line;
+//                            logger.debug(line);
+//                        }
+//                        line = input.readLine();
+//                    }while(!line.isEmpty());
+
                     Subtitle s = new Subtitle(id, hour, minute, second, endHour, endMinute, endSecond, sub);
                     subtitles.add(s);
-                    logger.debug(id + " " + hour + " " + minute + " " + second + " " + endHour + " " + endMinute + " " + endSecond + " " + sub + "\n");
+
+//                    logger.debug(s.getId() + " " + s.getStartHour() + " " + s.getStartMinute() + " " + s.getStartSecond()+ " " +
+//                            s.getEndHour() + " " + s.getEndMinute() + " " + s.getEndSecond() + " " + s.getSubtitle() + "\n");
+                    line = input.readLine();
+
                 }
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getStackTrace());
         }
         return subtitles;
 
     }
 
-        private void initMediaPlayer(Media media, Boolean dispose) {
+    private void initMediaPlayer(Media media, Boolean dispose) {
         if (dispose)
             mediaPlayer.dispose();
 
@@ -154,17 +169,7 @@ public class Controller implements Initializable {
             shouldDispose(file, false);
         });
         //mediaView.setViewOrder();
-        sub_label.setText("text");
-        timer = new Timer();
-        timerTask = new TimerTask(){
-            @Override
-            public void run() {
-                if(){
-
-                }
-
-            }
-        };
+        //sub_label.setText("text");
     }
 
     private void shouldDispose(File file, boolean remove){
@@ -193,15 +198,42 @@ public class Controller implements Initializable {
     }
     @FXML
     public void openSubtitles() {
+        File sub = null;
         try {
-            File sub = getFile();
-            logger.debug(sub.toURI().toString());
-            subtitles = loadSubtitles(sub);
-            shouldDispose(sub, true);
-
+            sub = getFile();
         } catch (NullPointerException e) {
             logger.error(e.getMessage());
         }
+        logger.debug(sub.toURI().toString());
+        subtitles = loadSubtitles(sub);
+        //shouldDispose(sub, true);
+
+        final ObservableMap<String, Duration> markers = mediaPlayer.getMedia().getMarkers();
+
+        for (Subtitle caption: subtitles) {
+            markers.put(caption.getSubtitle(), Duration.millis(caption.getStartMillis()));
+//            logger.debug(markers.get(caption.getSubtitle()));
+//            logger.debug(caption.getStartMillis());
+        }
+
+        for(String key: markers.keySet()){
+            logger.debug(key + ", " + markers.get(key));
+        }
+
+        mediaPlayer.setOnMarker(new EventHandler<MediaMarkerEvent>() {
+            @Override
+            public void handle(MediaMarkerEvent mediaMarkerEvent) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] text = mediaMarkerEvent.getMarker().getKey().split(",,");
+                        sub_label.setText(text[1]);
+                    }
+                });
+            }
+        });
+
+
     }
 
     @FXML
@@ -216,14 +248,12 @@ public class Controller implements Initializable {
         if (mediaPlayer == null) return;
         if (mediaPlayer.getStatus().toString().equals("PAUSED") ||
                 mediaPlayer.getStatus().toString().equals("STOPPED")) {
-            timer.cancel();
 
             playBtn.setText("Pause");
             mediaPlayer.play();
         } else {
             playBtn.setText("Play");
             mediaPlayer.pause();
-            timer.schedule(timerTask,0);
         }
         mediaPlayer.setRate(1);
     }
